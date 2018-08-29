@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hisense.springboot.mapper.MidCpnInternalModelMapper" >
+  <resultMap id="BaseResultMap" type="com.hisense.springboot.model.MidCpnInternalModel" >
+    <result column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="START_DEVICE" property="startDevice" jdbcType="VARCHAR" />
+    <result column="END_DEVICE" property="endDevice" jdbcType="VARCHAR" />
+    <result column="INTERNAL_TIME" property="internalTime" jdbcType="DECIMAL" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <insert id="insert" parameterType="com.hisense.springboot.model.MidCpnInternalModel" >
+    insert into MID_CPN_INTERNAL_TIME (ID, START_DEVICE, END_DEVICE, 
+      INTERNAL_TIME, CREATE_TIME)
+    values (#{id,jdbcType=VARCHAR}, #{startDevice,jdbcType=VARCHAR}, #{endDevice,jdbcType=VARCHAR}, 
+      #{internalTime,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select ID, START_DEVICE, END_DEVICE, INTERNAL_TIME, CREATE_TIME
+    from MID_CPN_INTERNAL_TIME
+  </select>
+</mapper>

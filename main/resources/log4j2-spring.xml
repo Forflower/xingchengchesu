@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info">
+    <properties>
+        <property name="PATTERN"> %d [%t] %-5p [%c] - %m%n </property>
+    </properties>
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${PATTERN}"/>
+        </Console>
+    </Appenders>
+    <!--/usr/travelspeed/logs-->
+    <File name="log" fileName="usr/travelspeed/logs/test.log" append="false">
+        <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+    </File>
+    <RollingFile name="RollingFile" fileName="E://logs/rollingtest.log"
+                 filePattern="E://logs/rollingtest$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+        <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+        <PatternLayout pattern="%d [%t] %-5p [%c] - %m%n"/>
+        <SizeBasedTriggeringPolicy size="50MB"/>
+
+    </RollingFile>
+
+    <Loggers>
+        <logger name="errorLog" level="info" >
+            <appender-ref ref="RollingFile"/>
+        </logger>
+        <Root level="info">
+            <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="CONSOLE"/>
+        </Root>
+        <!--<logger name="com.hisense.springboot" level="error" >
+            <appender-ref ref="RollingFile"/>
+        </logger>-->
+
+   </Loggers>
+</Configuration>
+       <!-- /Users/irving/IdeaProjects/SpringBoot-Study -->

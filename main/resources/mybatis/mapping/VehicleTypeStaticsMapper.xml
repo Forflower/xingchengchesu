@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hisense.springboot.mapper.VehicleTypeStaticsMapper" >
+  <resultMap id="BaseResultMap" type="com.hisense.springboot.model.VehicleTypeStatics" >
+    <id column="CPN_ID" property="cpnId" jdbcType="DECIMAL" />
+    <result column="CPN_DATE" property="cpnDate" jdbcType="TIMESTAMP" />
+    <result column="CPN_A" property="cpnA" jdbcType="DECIMAL" />
+    <result column="CPN_B" property="cpnB" jdbcType="DECIMAL" />
+    <result column="CPN_C" property="cpnC" jdbcType="DECIMAL" />
+    <result column="CPN_SC_NOT_A_B_C" property="cpnScNotABC" jdbcType="DECIMAL" />
+    <result column="CPN_NOT_SC" property="cpnNotSc" jdbcType="DECIMAL" />
+    <result column="CPN_TAXI" property="cpnTaxi" jdbcType="DECIMAL" />
+    <result column="CPN_AMOUNT" property="cpnAmount" jdbcType="DECIMAL" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from TEN_MIN_CPN
+    where CPN_ID = #{cpnId,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.hisense.springboot.model.VehicleTypeStatics" >
+    insert into TEN_MIN_CPN (CPN_ID, CPN_DATE, CPN_A, 
+      CPN_B, CPN_C, CPN_SC_NOT_A_B_C, 
+      CPN_NOT_SC, CPN_TAXI, CPN_AMOUNT
+      )
+    values (#{cpnId,jdbcType=DECIMAL}, #{cpnDate,jdbcType=TIMESTAMP}, #{cpnA,jdbcType=DECIMAL}, 
+      #{cpnB,jdbcType=DECIMAL}, #{cpnC,jdbcType=DECIMAL}, #{cpnScNotABC,jdbcType=DECIMAL}, 
+      #{cpnNotSc,jdbcType=DECIMAL}, #{cpnTaxi,jdbcType=DECIMAL}, #{cpnAmount,jdbcType=DECIMAL}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.hisense.springboot.model.VehicleTypeStatics" >
+    update TEN_MIN_CPN
+    set CPN_DATE = #{cpnDate,jdbcType=TIMESTAMP},
+      CPN_A = #{cpnA,jdbcType=DECIMAL},
+      CPN_B = #{cpnB,jdbcType=DECIMAL},
+      CPN_C = #{cpnC,jdbcType=DECIMAL},
+      CPN_SC_NOT_A_B_C = #{cpnScNotABC,jdbcType=DECIMAL},
+      CPN_NOT_SC = #{cpnNotSc,jdbcType=DECIMAL},
+      CPN_TAXI = #{cpnTaxi,jdbcType=DECIMAL},
+      CPN_AMOUNT = #{cpnAmount,jdbcType=DECIMAL}
+    where CPN_ID = #{cpnId,jdbcType=DECIMAL}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select CPN_ID, CPN_DATE, CPN_A, CPN_B, CPN_C, CPN_SC_NOT_A_B_C, CPN_NOT_SC, CPN_TAXI, 
+    CPN_AMOUNT
+    from TEN_MIN_CPN
+    where CPN_ID = #{cpnId,jdbcType=DECIMAL}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select CPN_ID, CPN_DATE, CPN_A, CPN_B, CPN_C, CPN_SC_NOT_A_B_C, CPN_NOT_SC, CPN_TAXI, 
+    CPN_AMOUNT
+    from TEN_MIN_CPN
+  </select>
+</mapper>

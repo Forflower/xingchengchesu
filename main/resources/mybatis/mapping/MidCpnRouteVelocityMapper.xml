@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hisense.springboot.mapper.MidCpnRouteVelocityMapper">
+    <resultMap id="BaseResultMap" type="com.hisense.springboot.model.MidCpnRouteVelocity">
+        <result column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="PLATE_NO" property="plateNo" jdbcType="VARCHAR"/>
+        <result column="PLATE_COLOR_ID" property="plateColorId" jdbcType="DECIMAL"/>
+        <result column="ROUTE_ID" property="routeId" jdbcType="VARCHAR"/>
+        <result column="T2_TIME" property="t2Time" jdbcType="TIMESTAMP"/>
+        <result column="INTERNAL_TIME" property="internalTime" jdbcType="DECIMAL"/>
+        <result column="VELOCITY" property="velocity" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <resultMap id="VelocityResultMap" type="com.hisense.springboot.model.TenMinRouteAvgVelocity">
+        <result column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="ROUTE_ID" property="routeId" jdbcType="VARCHAR"/>
+        <result column="CAL_TIME" property="calTime" jdbcType="VARCHAR"/>
+        <result column="VELOCITY" property="velocity" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <resultMap id="RouteMap" type="com.hisense.springboot.model.RouteList">
+        <id column="ROUTE_ID" property="routeId" jdbcType="VARCHAR"/>
+        <collection property="avgList" ofType="com.hisense.springboot.model.MidCpnRouteVelocity" javaType="ArrayList">
+            <result column="ID" property="id" jdbcType="VARCHAR"/>
+            <result column="PLATE_NO" property="plateNo" jdbcType="VARCHAR"/>
+            <result column="PLATE_COLOR_ID" property="plateColorId" jdbcType="DECIMAL"/>
+            <result column="ROUTE_ID" property="routeId" jdbcType="VARCHAR"/>
+            <result column="T2_TIME" property="t2Time" jdbcType="TIMESTAMP"/>
+            <result column="INTERNAL_TIME" property="internalTime" jdbcType="DECIMAL"/>
+            <result column="VELOCITY" property="velocity" jdbcType="DECIMAL"/>
+        </collection>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.hisense.springboot.model.MidCpnRouteVelocity">
+    insert into TD_TRAVELSPEED_MIDDLE (ID, PLATE_NO, PLATE_COLOR_ID,
+      ROUTE_ID, T2_TIME, INTERNAL_TIME, 
+      VELOCITY)
+    values (#{id,jdbcType=VARCHAR}, #{plateNo,jdbcType=VARCHAR}, #{plateColorId,jdbcType=DECIMAL}, 
+      #{routeId,jdbcType=VARCHAR}, #{t2Time,jdbcType=TIMESTAMP}, #{internalTime,jdbcType=DECIMAL},
+      #{velocity,jdbcType=DECIMAL})
+  </insert>
+    <select id="selectVelocityByGroup" parameterType="com.hisense.springboot.model.Duration" resultMap="RouteMap">
+        select ID, PLATE_NO, PLATE_COLOR_ID, ROUTE_ID, T2_TIME, INTERNAL_TIME, VELOCITY
+        from TD_TRAVELSPEED_MIDDLE
+        where 1=1
+        <if test="startTime!=null">
+            <![CDATA[   and TD_TRAVELSPEED_MIDDLE.t2_time >=  #{startTime,jdbcType=TIMESTAMP}]]>
+        </if>
+        <if test="endTime!=null">
+            <![CDATA[   and TD_TRAVELSPEED_MIDDLE.t2_time <=  #{endTime,jdbcType=TIMESTAMP}]]>
+        </if>
+    </select>
+    <select id="calAvgVelocity" parameterType="com.hisense.springboot.model.Duration" resultMap="VelocityResultMap">
+        select ROUTE_ID ,
+        sum(VELOCITY)/count(*) AS VELOCITY,
+        to_char(SYSDATE, 'yyyy-mm-dd HH24:MI') AS CAL_TIME
+        FROM TD_TRAVELSPEED_MIDDLE
+        where 1=1
+        <if test="startTime!=null">
+            <![CDATA[   and TD_TRAVELSPEED_MIDDLE.t2_time >=  #{startTime,jdbcType=TIMESTAMP}]]>
+        </if>
+        <if test="endTime!=null">
+            <![CDATA[   and TD_TRAVELSPEED_MIDDLE.t2_time <=  #{endTime,jdbcType=TIMESTAMP}]]>
+        </if>
+        group by TD_TRAVELSPEED_MIDDLE.ROUTE_ID
+    </select>
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hisense.springboot.mapper.VehicleAmountOnRoadMapper" >
+  <resultMap id="BaseResultMap" type="com.hisense.springboot.model.VehicleAmountOnRoad" >
+    <result column="ROAD_ID" property="roadId" jdbcType="DECIMAL" />
+    <result column="AMOUNT" property="amount" jdbcType="DECIMAL" />
+    <result column="CAP_TIME" property="capTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="com.hisense.springboot.model.VehicleAmountOnRoad" >
+    insert into VEHICLE_AMOUNT_ONROAD (ROAD_ID, AMOUNT, CAP_TIME
+      )
+    values (#{roadId,jdbcType=DECIMAL}, #{amount,jdbcType=DECIMAL}, #{capTime,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="false" >
+    insert into VEHICLE_AMOUNT_ONROAD (ROAD_ID, AMOUNT, CAP_TIME
+    )
+
+    <foreach collection ="list" item="item" index= "index" separator="union all">
+      ( select
+      #{roadId,jdbcType=DECIMAL}, #{amount,jdbcType=DECIMAL},
+      #{capTime,jdbcType=VARCHAR}
+      from dual
+      )
+    </foreach >
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select ROAD_ID, AMOUNT, CAP_TIME
+    from VEHICLE_AMOUNT_ONROAD
+  </select>
+</mapper>
